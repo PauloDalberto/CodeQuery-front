@@ -1,7 +1,7 @@
 "use client"
 
-import { GitHubRepoSearch } from "@/components/GitHubRepoSearch"
-import { LayoutSidebar } from "@/components/sidebarComponents/layout-sidebar"
+import { GitHubRepoSearch } from "@/components/shared/GitHubRepoSearch"
+import { LayoutSidebar } from "@/components/shared/layout-sidebar"
 
 export default function Home() {
   return (

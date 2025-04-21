@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -16,6 +17,8 @@ export function GitHubRepoSearch() {
   const [username, setUsername] = useState("")
   const [repos, setRepos] = useState<Repo[]>([])
   const [loading, setLoading] = useState(false)
+
+  const router = useRouter()
 
   const handleSearch = async () => {
     if (!username) return
@@ -38,6 +41,10 @@ export function GitHubRepoSearch() {
     }
   }
 
+  const handleSelectRepo = (repoName: string) => {
+    router.push(`/repo/${repoName}?user=${username}`)
+  }
+
   return (
     <div className="flex flex-col gap-6 px-6">
       <div className="flex items-center gap-2">
@@ -46,15 +53,26 @@ export function GitHubRepoSearch() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className="flex-1"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSearch(); 
+            }
+          }}
         />
         <Button onClick={handleSearch} disabled={loading}>
           {loading ? "Buscando..." : "Buscar"}
         </Button>
       </div>
 
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {repos.map((repo) => (
-          <Card key={repo.id} className="cursor-pointer hover:shadow-md transition-all">
+          <Card
+            key={repo.id}
+            className="cursor-pointer hover:shadow-md transition-all"
+            onClick={() => handleSelectRepo(repo.name)}
+          >
             <CardContent className="p-4">
               <p className="font-semibold">{repo.name}</p>
               <p className="text-sm text-muted-foreground">
