@@ -22,8 +22,6 @@ import {
 
 const data = {
   user: {
-    name: "Usuario",
-    email: "example@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
@@ -64,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
-        <NavUser user={data.user} />
+        <NavUser avatar={data.user} />
         <NavMain items={data.navMain} />
       </SidebarHeader>
       <SidebarContent>

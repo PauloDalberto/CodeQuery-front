@@ -5,23 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import GitHubSvg from "../../../public/github.svg";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { login } from "@/services/auth/auth";
-import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { LoginFormData, loginSchema } from "@/schemas/LoginSchema";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
-  const router = useRouter();
   const [loginError, setLoginError] = useState(false);
 
-  const loginSchema = z.object({
-    email: z.string().min(1, "Digite seu email").email("Por favor, digite um email válido!"),
-    password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres!"),
-  });
-  
-  type LoginFormData = z.infer<typeof loginSchema>;
+  const { signIn } = useContext(AuthContext);
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema)
@@ -30,13 +24,12 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
   const handleLogin = async (data: LoginFormData) => {
     try {
       const result = await login(data.email, data.password);
-      console.log(result)
-      router.push("/");
+
+      signIn(result.name, data.email);
     } catch (err) {
       console.error("Entrou no catch:", err);
       setLoginError(true);
     }
-     
   }
 
   return (
@@ -91,3 +84,4 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
     </form>
   )
 }
+
