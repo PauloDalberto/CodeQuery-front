@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import GitHubSvg from "../../../public/github.svg";
 import { useContext, useState } from "react";
-import { login } from "@/services/auth/auth";
+import { loginApi } from "@/services/auth/auth";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { LoginFormData, loginSchema } from "@/schemas/LoginSchema";
@@ -23,9 +23,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
 
   const handleLogin = async (data: LoginFormData) => {
     try {
-      const result = await login(data.email, data.password);
+      const result = await loginApi(data.email, data.password);
 
-      signIn(result.name, data.email);
+      signIn(result.user.name, data.email);
     } catch (err) {
       console.error("Entrou no catch:", err);
       setLoginError(true);
@@ -57,11 +57,13 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
               Esqueceu sua senha?
             </a>
         </div>
+
         {loginError && (
           <div className="text-red-600">
             Ocorreu erro ao realizar o login!
           </div>
         )}
+
         <Button type="submit" className="w-full">
           Login
         </Button>
