@@ -10,6 +10,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { RegisterFormData, registerSchema } from "@/schemas/RegisterSchema";
 import { registerApi } from "@/services/auth/auth";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export function RegisterForm({ className, ...props }: React.ComponentProps<"form">) {
   const router = useRouter();
@@ -31,7 +33,12 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"form
   return (
     <form onSubmit={handleSubmit(handleRegister)} className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Cadastre sua conta!</h1>
+        <div className="flex items-center justify-start w-full gap-2">
+          <Link href={'/login'}>
+            <ArrowLeft className="text-white cursor-pointer" />
+          </Link>
+          <h1 className="text-2xl font-bold">Cadastre sua conta!</h1>
+        </div>
         <p className="text-muted-foreground text-sm text-balance">
           Digite seus dados abaixo para entrar na sua conta
         </p>

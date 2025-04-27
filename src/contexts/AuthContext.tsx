@@ -11,18 +11,21 @@ interface UserData {
 interface AuthContextData {
   user: UserData | null;
   signIn: (name: string, email: string) => void;
+  logged: boolean
 }
 
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserData | null>(null);
+  const [logged, setLogged] = useState(false);
   const router = useRouter();
 
   function signIn(name: string, email: string) {
     if (email !== "") {
       const userData = { name, email };
       setUser(userData);
+      setLogged(true)
 
       localStorage.setItem("user_name", name);
       localStorage.setItem("user_email", email);
@@ -42,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, signIn }}>
+    <AuthContext.Provider value={{ user, signIn, logged }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,6 +1,7 @@
 import { GalleryVerticalEnd } from "lucide-react"
-
 import { RegisterForm } from "@/components/loginComponents/register-form"
+import Image from "next/image"
+
 
 export default function RegisterPage() {
   return (
@@ -21,7 +22,13 @@ export default function RegisterPage() {
         </div>
       </div>
       <div className="bg-muted relative hidden lg:block">
-        {/* {imagem aqui} */}
+        <Image
+          width={"1000"}
+          height={"1000"}
+          src="/space.jpg"
+          alt="Image"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
       </div>
     </div>
   )
