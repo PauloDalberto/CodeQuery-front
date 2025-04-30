@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { userGitHubApi } from "@/services/github/github"
 
 type Repo = {
   id: number
@@ -14,35 +15,34 @@ type Repo = {
 }
 
 export function GitHubRepoSearch() {
-  const [username, setUsername] = useState("")
-  const [repos, setRepos] = useState<Repo[]>([])
-  const [loading, setLoading] = useState(false)
+  const [username, setUsername] = useState("");
+  const [repos, setRepos] = useState<Repo[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const handleSearch = async () => {
-    if (!username) return
-    setLoading(true)
+    if (!username) return;
+    setLoading(true);
 
     try {
-      const res = await fetch(`https://api.github.com/users/${username}/repos`)
-      const data = await res.json()
+      const response = await userGitHubApi(username);
 
-      if (Array.isArray(data)) {
-        setRepos(data)
+      if (Array.isArray(response)) {
+        setRepos(response);
       } else {
-        setRepos([])
+        setRepos([]);
       }
     } catch (err) {
-      console.error("Erro ao buscar repositórios:", err)
-      setRepos([])
+      console.error("Erro ao buscar repositórios:", err);
+      setRepos([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
-  const handleSelectRepo = (repoName: string) => {
-    router.push(`/repo/${repoName}?user=${username}`)
+  const handleSelectRepo = async (repoName: string) => {
+    router.push(`/repo/${repoName}/${username}`);
   }
 
   return (
@@ -64,7 +64,6 @@ export function GitHubRepoSearch() {
           {loading ? "Buscando..." : "Buscar"}
         </Button>
       </div>
-
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {repos.map((repo) => (

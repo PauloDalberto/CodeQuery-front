@@ -2,14 +2,23 @@
 
 import { LayoutSidebar } from "@/components/shared/layout-sidebar"
 import { Button } from "@/components/ui/button"
+import { repoGitHubApi } from "@/services/github/github";
 import { useParams, useRouter } from "next/navigation"
 
 export default function RepoPage() {
   const router = useRouter();
   const params = useParams();
 
-  const handleClick = () => {
-    router.push(`/repo/${params.name}/chatAi`);
+  const handleClick =  async () => {
+
+    try {
+      await repoGitHubApi(params.username as string, params.name as string);
+      
+      console.log("Dados passados: ", params.username, params.name );
+      router.push(`/repo/${params.name}/${params.username}/chatAi`);
+    } catch (error) {
+      console.log("Erro ao buscar repos", error)
+    }
   }
 
   return (
