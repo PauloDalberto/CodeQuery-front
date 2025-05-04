@@ -31,7 +31,7 @@ export function LayoutSidebar({ children, title }: WithSidebarLayoutProps) {
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage className="line-clamp-1">
-                    {title || "Untitled Page"}
+                    {title}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
