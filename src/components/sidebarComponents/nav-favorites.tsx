@@ -23,28 +23,33 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import React from "react"
+import { room } from "@/services/ia/roons"
 
-export function NavFavorites({
-  favorites,
-}: {
-  favorites: {
-    name: string
-    url: string
-    emoji: string
-  }[]
-}) {
-  const { isMobile } = useSidebar()
+export function NavFavorites() {
+  const { isMobile } = useSidebar();
+  const [rooms, setRooms] = React.useState<{ title: string; id: string }[]>([]); 
+  
+  React.useEffect(() => {
+    async function getRoom() {
+     const responseRoom = await room();
+     setRooms(responseRoom);
+     console.log("oieeee", responseRoom)
+   }
+
+   getRoom();
+ }, [])
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Historico</SidebarGroupLabel>
       <SidebarMenu>
-        {favorites.map((item) => (
-          <SidebarMenuItem key={item.name}>
+        
+        {rooms.map((item) => (
+          <SidebarMenuItem key={item.id}>
             <SidebarMenuButton asChild>
-              <a href={item.url} title={item.name}>
-                <span>{item.emoji}</span>
-                <span>{item.name}</span>
+              <a href={`/room/${item.title}`} title={item.title}>
+                <span>{item.title}</span>
               </a>
             </SidebarMenuButton>
             <DropdownMenu>

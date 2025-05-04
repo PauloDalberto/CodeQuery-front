@@ -52,13 +52,6 @@ const data = {
       url: "#",
       icon: MessageCircleQuestion,
     },
-  ],
-  favorites: [
-    {
-      name: "Project Management & Task Tracking",
-      url: "#",
-      emoji: "📊",
-    }
   ]
 }
 
@@ -83,7 +76,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <DialogComponent />
           </SidebarHeader>
           <SidebarContent>
-            <NavFavorites favorites={data.favorites} />
+            <NavFavorites  />
             <NavSecondary items={data.navSecondary} className="mt-auto" />
           </SidebarContent>
           <SidebarRail />
