@@ -1,4 +1,7 @@
-import { Button } from "@/components/ui/button"
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -7,24 +10,25 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function DialogComponent() {
-  const [inputValue, setInputValue] = useState("");
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState("");
   const router = useRouter();
 
-  const handleSave = () => {
-    if (inputValue.trim() === "") return;
+  const handleSave = async () => {
+    if (!name.trim()) return;
 
-    router.push(`/?title=${encodeURIComponent(inputValue)}`);
+    router.push(`/room/${name}`);
+    setOpen(false); 
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="default">Criar nova conversa</Button>
       </DialogTrigger>
@@ -32,7 +36,7 @@ export function DialogComponent() {
         <DialogHeader>
           <DialogTitle>Criar nova conversa</DialogTitle>
           <DialogDescription>
-            Digite o titulo da sua nova conversa!
+            Digite o título da sua nova conversa!
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -42,16 +46,18 @@ export function DialogComponent() {
             </Label>
             <Input
               id="name"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="col-span-3"
             />
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handleSave}>Salvar alterações</Button>
+          <Button type="button" onClick={handleSave}>
+            Salvar alterações
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

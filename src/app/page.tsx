@@ -1,7 +1,7 @@
 "use client"
 
-import { GitHubRepoSearch } from "@/components/shared/GitHubRepoSearch"
 import { LayoutSidebar } from "@/components/shared/layout-sidebar"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useSearchParams } from "next/navigation";
 
 export default function Home() {
@@ -10,7 +10,14 @@ export default function Home() {
   
   return (
     <LayoutSidebar title={title}>
-      <GitHubRepoSearch />
+      <div className="flex justify-center items-center w-full h-full">
+        <Alert className="w-fit">
+          <AlertTitle>Crie uma sala</AlertTitle>
+          <AlertDescription>
+            Para prosseguir, crie uma sala (o botão está na sidebar!)
+          </AlertDescription>
+        </Alert>
+      </div>
     </LayoutSidebar>
   )
 }

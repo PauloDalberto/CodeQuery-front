@@ -10,7 +10,6 @@ export default function RepoPage() {
   const params = useParams();
 
   const handleClick =  async () => {
-
     try {
       await repoGitHubApi(params.username as string, params.name as string);
       
