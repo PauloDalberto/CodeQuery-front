@@ -1,4 +1,4 @@
 type Message = {
-  sender: "user" | "ai";
-  content: string;
-};
+  role: "user" | "model",
+  parts: string | { text: string }
+}

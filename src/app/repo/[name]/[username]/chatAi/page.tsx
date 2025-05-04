@@ -17,13 +17,13 @@ export default function ChatAi() {
 
     const response = await chatAiApi(input);
 
-    const userMessage: Message = { sender: "user", content: input };
+    const userMessage: Message = { role: "user", parts: input };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
     const aiMessage: Message = {
-      sender: "ai",
-      content: response.reply,
+      role: "model",
+      parts: response.reply,
     };
 
     setMessages((prev) => [...prev, aiMessage]);
@@ -45,17 +45,17 @@ export default function ChatAi() {
             <div
               key={index}
               className={`flex ${ 
-                msg.sender === "user" ? "justify-end" : "justify-start" 
+                msg.role === "user" ? "justify-end" : "justify-start" 
               }`}
             >
               <div
                 className={`px-4 py-2 rounded-xl text-sm max-w-[70%] ${
-                  msg.sender === "user"
+                  msg.role === "user"
                     ? "bg-blue-500 text-white"
                     : "bg-muted text-foreground"
                 }`}
               >
-                {msg.content}
+                {msg.role}
               </div>
             </div>
           ))}

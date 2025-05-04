@@ -22,6 +22,7 @@ import {
 import { AuthContext } from "@/contexts/AuthContext"
 import { Button } from "../ui/button"
 import { useRouter } from "next/navigation"
+import { DialogComponent } from "../dialog/dialog"
 
 const data = {
   user: {
@@ -64,7 +65,7 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { logged } = React.useContext(AuthContext);
   const router = useRouter();
-  
+
   return (
     <Sidebar className="border-r-0" {...props}>
       {!logged ? (
@@ -79,6 +80,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarHeader>
             <NavUser avatar={data.user} />
             <NavMain items={data.navMain} />
+            <DialogComponent />
           </SidebarHeader>
           <SidebarContent>
             <NavFavorites favorites={data.favorites} />

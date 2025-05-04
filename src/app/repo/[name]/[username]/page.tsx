@@ -35,9 +35,7 @@ export default function RepoPage() {
         <h1 className="flex text-2xl font-bold mb-2">Repositório Selecionado: <p className="ml-2">{params.name}</p></h1>
         
         <div className="flex flex-col gap-4">
-          <Button variant="outline" onClick={handleClick}>🛠 Refatorar com IA</Button>
-          <Button variant="outline">💬 Conversar com IA</Button>
-          <Button variant="outline">⚔️ Desafio Técnico</Button>
+          <Button variant="outline" onClick={handleClick}>💬 Conversar com IA</Button>
         </div>
       </div>
     </LayoutSidebar>
