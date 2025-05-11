@@ -10,14 +10,8 @@ export default function RepoPage() {
   const params = useParams();
 
   const handleClick =  async () => {
-    try {
-      await repoGitHubApi(params.username as string, params.name as string);
-      
-      console.log("Dados passados: ", params.username, params.name );
-      router.push(`/repo/${params.name}/${params.username}/chatAi`);
-    } catch (error) {
-      console.log("Erro ao buscar repos", error)
-    }
+    await repoGitHubApi(params.username as string, params.name as string);
+    router.push(`/repo/room/${params.conversation}/${params.name}/${params.username}/chatAi`);      
   }
 
   return (
@@ -31,8 +25,10 @@ export default function RepoPage() {
       </Button>
 
       <div className="p-6">
-        <h1 className="flex text-2xl font-bold mb-2">Repositório Selecionado: <p className="ml-2">{params.name}</p></h1>
-        
+        <h1 className="flex text-2xl font-bold mb-2">
+          Repositório Selecionado: <p className="ml-2">{params.name}</p>
+        </h1>
+
         <div className="flex flex-col gap-4">
           <Button variant="outline" onClick={handleClick}>💬 Conversar com IA</Button>
         </div>

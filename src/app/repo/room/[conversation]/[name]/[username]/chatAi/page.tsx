@@ -4,26 +4,49 @@ import { LayoutSidebar } from "@/components/shared/layout-sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { chatAiApi } from "@/services/ia/ia";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { listMessages } from "@/services/ia/rooms";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function ChatAi() {
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const params = useParams();
 
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const prevMessages = await listMessages(params.conversation as string);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const formattedMessages = prevMessages.messages.map((msg: any) => ({
+        role: msg.role,
+        parts: msg.content, 
+      }));
+
+      setMessages(formattedMessages);
+    };
+
+    fetchMessages();
+  }, [params.conversation]);
+  
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const response = await chatAiApi(input);
+    console.log(params.conversation as string);
+    
+    const [responseChat] = await Promise.all([
+      chatAiApi(params.conversation as string, input),
+    ]);
 
     const userMessage: Message = { role: "user", parts: input };
+
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
     const aiMessage: Message = {
       role: "model",
-      parts: response.reply,
+      parts: responseChat.reply,
     };
 
     setMessages((prev) => [...prev, aiMessage]);
@@ -41,6 +64,7 @@ export default function ChatAi() {
 
       <div className="p-6 flex flex-col h-[80vh]">
         <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 ">
+
           {messages.map((msg, index) => (
             <div
               key={index}
@@ -55,7 +79,7 @@ export default function ChatAi() {
                     : "bg-muted text-foreground"
                 }`}
               >
-                {msg.role}
+                {msg.parts as string}
               </div>
             </div>
           ))}

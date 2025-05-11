@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createRoom } from "@/services/ia/roons";
+import { createRoom } from "@/services/ia/rooms";
 
 export function DialogComponent() {
   const [open, setOpen] = useState(false);
@@ -26,7 +26,7 @@ export function DialogComponent() {
 
     await createRoom(name)
 
-    router.push(`/room/${name}`);
+    router.push(`/repo/room/${name}`);
     setOpen(false); 
   };
 

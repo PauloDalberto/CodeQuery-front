@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -18,6 +18,9 @@ export function GitHubRepoSearch() {
   const [username, setUsername] = useState("");
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(false);
+  const params = useParams();
+  
+  const roomName = params?.conversation as string;
 
   const router = useRouter();
 
@@ -42,7 +45,7 @@ export function GitHubRepoSearch() {
   }
 
   const handleSelectRepo = async (repoName: string) => {
-    router.push(`/repo/${repoName}/${username}`);
+    router.push(`/repo/room/${roomName}/${repoName}/${username}`);
   }
 
   return (

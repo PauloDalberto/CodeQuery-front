@@ -2,7 +2,7 @@
 
 import {
   ArrowUpRight,
-  Link,
+  LinkIcon,
   MoreHorizontal,
   Trash2,
 } from "lucide-react"
@@ -24,17 +24,19 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import React from "react"
-import { room } from "@/services/ia/roons"
+import { room } from "@/services/ia/rooms"
+import Link from 'next/link'
+import { useConversation } from "@/contexts/ConversationContext"
 
 export function NavFavorites() {
   const { isMobile } = useSidebar();
-  const [rooms, setRooms] = React.useState<{ title: string; id: string }[]>([]); 
+  const [rooms, setRooms] = React.useState<{ title: string; uuid: string }[]>([]); 
+  const { setTitle } = useConversation()
   
   React.useEffect(() => {
     async function getRoom() {
      const responseRoom = await room();
      setRooms(responseRoom);
-     console.log("oieeee", responseRoom)
    }
 
    getRoom();
@@ -44,13 +46,15 @@ export function NavFavorites() {
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Historico</SidebarGroupLabel>
       <SidebarMenu>
-        
         {rooms.map((item) => (
-          <SidebarMenuItem key={item.id}>
-            <SidebarMenuButton asChild>
-              <a href={`/room/${item.title}`} title={item.title}>
+          <SidebarMenuItem key={item.uuid}>
+            <SidebarMenuButton 
+              onClick={() => setTitle(item.title)}
+              asChild
+            >
+              <Link href={`/repo/room/${item.uuid}`}>
                 <span>{item.title}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -65,7 +69,7 @@ export function NavFavorites() {
                 align={isMobile ? "end" : "start"}
               >
                 <DropdownMenuItem>
-                  <Link className="text-muted-foreground" />
+                  <LinkIcon className="text-muted-foreground" />
                   <span>Copy Link</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
