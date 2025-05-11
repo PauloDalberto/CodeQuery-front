@@ -24,9 +24,9 @@ export function DialogComponent() {
   const handleSave = async () => {
     if (!name.trim()) return;
 
-    await createRoom(name)
+    const response = await createRoom(name)
 
-    router.push(`/repo/room/${name}`);
+    router.push(`/repo/room/${response.uuid}`);
     setOpen(false); 
   };
 

@@ -15,7 +15,7 @@ export const listMessages = async (uuid: string) => {
   return response.data;
 }
 
-export const uptadeConverastion = async (uuid: string) => {
-  const response = await API.put(`/conversation/${uuid}`);
+export const uptadeConverastion = async (uuid: string, repository: string, username: string) => {
+  const response = await API.put(`/conversation/${uuid}`, { repository, username });
   return response.data;
 }

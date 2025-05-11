@@ -3,7 +3,7 @@
 import { GitHubRepoSearch } from "@/components/shared/GitHubRepoSearch";
 import { LayoutSidebar } from "@/components/shared/layout-sidebar";
 import { useConversation } from "@/contexts/ConversationContext";
-import { listMessages } from "@/services/ia/rooms";
+import { listMessages, room } from "@/services/ia/rooms";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -16,24 +16,21 @@ export default function Conversation() {
   useEffect(() => {
     const checkMessages = async () => {
       try {
+        const roomsData = await room();
+        
         setLoading(true);
         console.log("Parâmetros da URL:", params);
 
-        // Verifica se os parâmetros obrigatórios estão presentes
-        if (!params.conversation || !params.name || !params.username) {
-          console.error("Parâmetros faltando!");
-          return;
-        }
-
-        // Busca as mensagens usando o UUID
         const response = await listMessages(params.conversation as string);
 
-        if (response.messages && response.messages.length > 0) {
-          // Redireciona para a página do chat com os parâmetros completos
-          router.push(`/repo/room/${params.conversation}/${params.name}/${params.username}/chatAi`);
-        } else {
-          console.log("Nenhuma mensagem encontrada.");
-        }
+        if(params.conversatiom === roomsData.uuid) {
+          if (response.messages && response.messages.length > 0) {
+            router.push(`/repo/room/${params.conversation}/${roomsData[0].repository}/${roomsData[0].username}/chatAi`);
+          } else {
+            console.log("Nenhuma mensagem encontrada.");
+          }
+        } 
+        
       } catch (error) {
         console.error("Erro ao verificar mensagens:", error);
       } finally {

@@ -4,7 +4,7 @@ import { LayoutSidebar } from "@/components/shared/layout-sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { chatAiApi } from "@/services/ia/ia";
-import { listMessages } from "@/services/ia/rooms";
+import { listMessages, uptadeConverastion } from "@/services/ia/rooms";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -16,7 +16,10 @@ export default function ChatAi() {
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const prevMessages = await listMessages(params.conversation as string);
+      const [prevMessages] = await Promise.all([
+        listMessages(params.conversation as string),
+        uptadeConverastion(params.conversation as string, params.name as string, params.username as string) 
+      ]);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const formattedMessages = prevMessages.messages.map((msg: any) => ({
@@ -28,16 +31,12 @@ export default function ChatAi() {
     };
 
     fetchMessages();
-  }, [params.conversation]);
+  }, [params.conversation, params.name, params.username]);
   
   const handleSend = async () => {
     if (!input.trim()) return;
-
-    console.log(params.conversation as string);
-    
-    const [responseChat] = await Promise.all([
-      chatAiApi(params.conversation as string, input),
-    ]);
+  
+    const responseChat = await chatAiApi(params.conversation as string, input)
 
     const userMessage: Message = { role: "user", parts: input };
 
