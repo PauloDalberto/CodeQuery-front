@@ -25,7 +25,7 @@ export default function Conversation() {
 
         if(params.conversatiom === roomsData.uuid) {
           if (response.messages && response.messages.length > 0) {
-            router.push(`/repo/room/${params.conversation}/${roomsData[0].repository}/${roomsData[0].username}/chatAi`);
+            router.push(`/repo/room/${params.conversation}/chat`);
           } else {
             console.log("Nenhuma mensagem encontrada.");
           }

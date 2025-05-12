@@ -18,15 +18,19 @@ export default function ChatAi() {
 
   useEffect(() => {
     const fetchMessages = async () => {
-      const [prevMessages] = await Promise.all([
-        listMessages(params.conversation as string),
-        uptadeConverastion(params.conversation as string, repo as string, username as string)
-      ]);
+      const alreadyUpdated = localStorage.getItem(`updated-${params.conversation}`);
+      
+      if (!alreadyUpdated) {
+        await uptadeConverastion(params.conversation as string, repo as string, username as string);
+        localStorage.setItem(`updated-${params.conversation}`, "true");
+      }
+
+      const prevMessages = await listMessages(params.conversation as string);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const formattedMessages = prevMessages.messages.map((msg: any) => ({
         role: msg.role,
-        parts: msg.content, 
+        parts: msg.content,
       }));
 
       setMessages(formattedMessages);
@@ -34,11 +38,12 @@ export default function ChatAi() {
 
     fetchMessages();
   }, [params.conversation, repo, username]);
-  
+
+
   const handleSend = async () => {
     if (!input.trim()) return;
-  
-    const responseChat = await chatAiApi(params.conversation as string, input)
+
+    const responseChat = await chatAiApi(params.conversation as string, input);
 
     const userMessage: Message = { role: "user", parts: input };
 
@@ -94,7 +99,7 @@ export default function ChatAi() {
             placeholder="Digite sua mensagem..."
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
-          <Button  onClick={handleSend} className="h-14">Enviar</Button>
+          <Button onClick={handleSend} className="h-14">Enviar</Button>
         </div>
       </div>
     </LayoutSidebar>
