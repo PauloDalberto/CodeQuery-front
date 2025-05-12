@@ -3,6 +3,7 @@
 import { LayoutSidebar } from "@/components/shared/layout-sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRepoContext } from "@/contexts/RepoContext";
 import { chatAiApi } from "@/services/ia/ia";
 import { listMessages, uptadeConverastion } from "@/services/ia/rooms";
 import { useParams, useRouter } from "next/navigation";
@@ -13,12 +14,13 @@ export default function ChatAi() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const params = useParams();
+  const { repo, username } = useRepoContext();
 
   useEffect(() => {
     const fetchMessages = async () => {
       const [prevMessages] = await Promise.all([
         listMessages(params.conversation as string),
-        uptadeConverastion(params.conversation as string, params.name as string, params.username as string) 
+        uptadeConverastion(params.conversation as string, repo as string, username as string)
       ]);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,7 +33,7 @@ export default function ChatAi() {
     };
 
     fetchMessages();
-  }, [params.conversation, params.name, params.username]);
+  }, [params.conversation, repo, username]);
   
   const handleSend = async () => {
     if (!input.trim()) return;

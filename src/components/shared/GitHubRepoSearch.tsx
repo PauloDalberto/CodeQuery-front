@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { userGitHubApi } from "@/services/github/github"
+import { useRepoContext } from "@/contexts/RepoContext"
 
 type Repo = {
   id: number
@@ -15,21 +16,22 @@ type Repo = {
 }
 
 export function GitHubRepoSearch() {
-  const [username, setUsername] = useState("");
+  const [user, setUser] = useState("");
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(false);
   const params = useParams();
+  const { setRepo, setUsername } = useRepoContext();
   
   const roomName = params?.conversation as string;
 
   const router = useRouter();
 
   const handleSearch = async () => {
-    if (!username) return;
+    if (!user) return;
     setLoading(true);
 
     try {
-      const response = await userGitHubApi(username);
+      const response = await userGitHubApi(user);
 
       if (Array.isArray(response)) {
         setRepos(response);
@@ -45,7 +47,9 @@ export function GitHubRepoSearch() {
   }
 
   const handleSelectRepo = async (repoName: string) => {
-    router.push(`/repo/room/${roomName}/${repoName}/${username}`);
+    setRepo(repoName);
+    setUsername(user)
+    router.push(`/repo/room/${roomName}/mode`);
   }
 
   return (
@@ -53,8 +57,8 @@ export function GitHubRepoSearch() {
       <div className="flex items-center gap-2">
         <Input
           placeholder="Digite o nome de usuário do GitHub..."
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={user}
+          onChange={(e) => setUser(e.target.value)}
           className="flex-1"
           onKeyDown={(e) => {
             if (e.key === "Enter") {

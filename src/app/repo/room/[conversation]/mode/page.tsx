@@ -2,16 +2,19 @@
 
 import { LayoutSidebar } from "@/components/shared/layout-sidebar"
 import { Button } from "@/components/ui/button"
+import { useRepoContext } from "@/contexts/RepoContext";
 import { repoGitHubApi } from "@/services/github/github";
 import { useParams, useRouter } from "next/navigation"
 
 export default function RepoPage() {
   const router = useRouter();
   const params = useParams();
+  const { repo, username } = useRepoContext();
 
   const handleClick =  async () => {
-    await repoGitHubApi(params.username as string, params.name as string);
-    router.push(`/repo/room/${params.conversation}/${params.name}/${params.username}/chatAi`);      
+    console.log(username as string, repo as string)
+    await repoGitHubApi(username as string, repo as string);
+    router.push(`/repo/room/${params.conversation}/chat`);      
   }
 
   return (
@@ -26,7 +29,7 @@ export default function RepoPage() {
 
       <div className="p-6">
         <h1 className="flex text-2xl font-bold mb-2">
-          Repositório Selecionado: <p className="ml-2">{params.name}</p>
+          Repositório Selecionado: <p className="ml-2">{repo}</p>
         </h1>
 
         <div className="flex flex-col gap-4">
