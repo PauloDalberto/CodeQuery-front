@@ -11,10 +11,16 @@ export default function RepoPage() {
   const params = useParams();
   const { repo, username } = useRepoContext();
 
-  const handleClick =  async () => {
+  const handleSelectChat =  async () => {
     console.log(username as string, repo as string)
     await repoGitHubApi(username as string, repo as string);
     router.push(`/repo/room/${params.conversation}/chat`);      
+  }
+
+  const handleSelectChallenge =  async () => {
+    console.log(username as string, repo as string)
+    await repoGitHubApi(username as string, repo as string);
+    router.push(`/repo/room/${params.conversation}/challenge`);      
   }
 
   return (
@@ -33,7 +39,8 @@ export default function RepoPage() {
         </h1>
 
         <div className="flex flex-col gap-4">
-          <Button variant="outline" onClick={handleClick}>💬 Conversar com IA</Button>
+          <Button variant="outline" className="" onClick={handleSelectChat}>💬 Conversar com IA</Button>
+          <Button variant="outline" onClick={handleSelectChallenge}>🎯 Desafios e refatoração com o Chat</Button>
         </div>
       </div>
     </LayoutSidebar>

@@ -4,7 +4,7 @@ import { LayoutSidebar } from "@/components/shared/layout-sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRepoContext } from "@/contexts/RepoContext";
-import { chatAiApi } from "@/services/ia/ia";
+import { challengeAiApi } from "@/services/ia/ia";
 import { listMessages, uptadeConverastion } from "@/services/ia/rooms";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -43,7 +43,7 @@ export default function ChatAi() {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const responseChat = await chatAiApi(params.conversation as string, input);
+    const responseChat = await challengeAiApi(params.conversation as string, input);
 
     const userMessage: Message = { role: "user", parts: input };
 
@@ -59,7 +59,7 @@ export default function ChatAi() {
   };
 
   return (
-    <LayoutSidebar title="Chat com IA">
+    <LayoutSidebar title="Refatoração com IA">
 
       <div className="p-6 flex flex-col h-[80vh]">
         <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 ">
