@@ -27,20 +27,26 @@ import React from "react"
 import { room } from "@/services/ia/rooms"
 import Link from 'next/link'
 import { useConversation } from "@/contexts/ConversationContext"
+import { AlertDialogComponent } from "../dialog/dialogContinue"
 
 export function NavFavorites() {
   const { isMobile } = useSidebar();
   const [rooms, setRooms] = React.useState<{ title: string; uuid: string }[]>([]); 
+  const [showDialog, setShowDialog] = React.useState(false); 
   const { setTitle } = useConversation()
   
   React.useEffect(() => {
     async function getRoom() {
      const responseRoom = await room();
      setRooms(responseRoom);
-   }
+    }
 
-   getRoom();
- }, [])
+    getRoom();
+  }, [])
+
+  const handleDelete = async () => {
+    setShowDialog(true);
+  }
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -79,7 +85,7 @@ export function NavFavorites() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Trash2 className="text-muted-foreground" />
-                  <span>Delete</span>
+                  <span onClick={handleDelete}>Delete</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -92,6 +98,13 @@ export function NavFavorites() {
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
+
+      {showDialog && (
+        <AlertDialogComponent 
+          isOpen={showDialog} 
+          onClose={() => setShowDialog(false)} 
+        />
+      )}
     </SidebarGroup>
   )
 }

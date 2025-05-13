@@ -2,7 +2,6 @@ import { ReactNode } from "react"
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { AppSidebar } from "@/components/sidebarComponents/app-sidebar"
-import { NavActions } from "@/components/sidebarComponents/nav-actions"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -36,9 +35,6 @@ export function LayoutSidebar({ children, title }: WithSidebarLayoutProps) {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
-          </div>
-          <div className="ml-auto px-3">
-            <NavActions />
           </div>
         </header>
 
