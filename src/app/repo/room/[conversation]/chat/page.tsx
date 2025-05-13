@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRepoContext } from "@/contexts/RepoContext";
 import { chatAiApi } from "@/services/ia/ia";
-import { listMessages, uptadeConverastion } from "@/services/ia/rooms";
+import { listMessages, uptadeConversation } from "@/services/ia/rooms";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactMarkdown from 'react-markdown'
@@ -21,7 +21,7 @@ export default function ChatAi() {
       const alreadyUpdated = localStorage.getItem(`updated-${params.conversation}`);
       
       if (!alreadyUpdated) {
-        await uptadeConverastion(params.conversation as string, repo as string, username as string);
+        await uptadeConversation(params.conversation as string, repo as string, username as string);
         localStorage.setItem(`updated-${params.conversation}`, "true");
       }
 

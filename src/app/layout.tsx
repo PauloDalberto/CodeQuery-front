@@ -31,7 +31,6 @@ export default function RootLayout({
         <RootContextProvider>
           {children}
         </RootContextProvider>
-
       </body>
     </html>
   );
