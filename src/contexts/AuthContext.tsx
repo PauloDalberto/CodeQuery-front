@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { getProfile } from "@/services/auth/auth";
 
 interface UserData {
@@ -22,6 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserData | null>(null);
   const [logged, setLogged] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   function signIn(name: string, email: string) {
     const userData = { name, email };
@@ -47,13 +48,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser({ name: profile.name, email: profile.email });
         setLogged(true);
       } catch (err) {
-        logout();
-        console.log(err)
+        if (!["/login", "/register"].includes(pathname)) {
+          logout();
+        }
+        console.log(err);
       }
     };
 
     validateToken();
-  }, []);
+  }, [pathname]);
 
   return (
     <AuthContext.Provider value={{ user, signIn, logout, logged }}>
