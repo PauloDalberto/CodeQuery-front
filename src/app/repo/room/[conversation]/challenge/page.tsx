@@ -10,6 +10,11 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactMarkdown from 'react-markdown'
 
+interface Messages{
+  role: string;
+  content: string;
+}
+
 export default function ChatAi() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -27,8 +32,7 @@ export default function ChatAi() {
 
       const prevMessages = await listMessages(params.conversation as string);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const formattedMessages = prevMessages.messages.map((msg: any) => ({
+      const formattedMessages = prevMessages.messages.map((msg: Messages) => ({
         role: msg.role,
         parts: msg.content,
       }));
