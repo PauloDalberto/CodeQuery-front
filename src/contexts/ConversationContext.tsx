@@ -5,6 +5,8 @@ import { createContext, useContext, useState } from "react";
 type ConversationContextType = {
   title: string
   setTitle: (title: string) => void;
+  uuid: string
+  setUuid: (uuid: string) => void;
 }
 
 const ConversationContext = createContext<ConversationContextType | null>(null);
@@ -20,9 +22,10 @@ export const useConversation = () => {
 
 export const ConversationProvider = ({ children }: { children: React.ReactNode }) => {
   const [title, setTitle] = useState("");
+  const [uuid, setUuid] = useState("");
 
   return (
-    <ConversationContext.Provider value={{ title, setTitle }}>
+    <ConversationContext.Provider value={{ title, setTitle, uuid, setUuid }}>
       {children}
     </ConversationContext.Provider>
   );
