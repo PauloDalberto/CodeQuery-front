@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import GitHubSvg from "../../../public/github.svg";
 import { useRouter } from "next/navigation";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -46,7 +45,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"form
       <div className="grid gap-6" >
         <div className="grid gap-3">
           <Label htmlFor="name">Nome</Label>
-          <Input id="name" type="text" placeholder="example@example.com"  {...register('name')} helperText={errors.name?.message} />
+          <Input id="name" type="text" placeholder="Ex: João"  {...register('name')} helperText={errors.name?.message} />
         </div>
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
@@ -62,15 +61,6 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"form
         </div>
         <Button type="submit" className="w-full">
           Registre-se
-        </Button>
-        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-          <span className="bg-background text-muted-foreground relative z-10 px-2">
-            Ou continue com
-          </span>
-        </div>
-        <Button variant="outline" className="w-full">
-          <GitHubSvg />
-          Login com GitHub
         </Button>
       </div>
     </form>
