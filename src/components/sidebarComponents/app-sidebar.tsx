@@ -2,15 +2,11 @@
 
 import * as React from "react"
 import {
-  Home,
-  MessageCircleQuestion,
-  Search,
-  Settings2,
+  Home
 } from "lucide-react"
 
 import { NavFavorites } from "@/components/sidebarComponents/nav-favorites"
 import { NavMain } from "@/components/sidebarComponents/nav-main"
-import { NavSecondary } from "@/components/sidebarComponents/nav-secondary"
 import { NavUser } from "@/components/sidebarComponents/nav-user"
 
 import {
@@ -31,27 +27,10 @@ const data = {
   navMain: [
     {
       title: "Home",
-      url: "#",
+      url: "/",
       icon: Home,
       isActive: true,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: Search,
     }
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-    },
-    {
-      title: "Help",
-      url: "#",
-      icon: MessageCircleQuestion,
-    },
   ]
 }
 
@@ -77,7 +56,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarHeader>
           <SidebarContent>
             <NavFavorites  />
-            <NavSecondary items={data.navSecondary} className="mt-auto" />
           </SidebarContent>
           <SidebarRail />
         </>
