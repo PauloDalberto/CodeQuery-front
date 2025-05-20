@@ -5,8 +5,7 @@ export const userGitHubApi = async (username: string) => {
   return response.data;
 } 
 
-export const repoGitHubApi = async (username: string, repo: string) => {
-  const response = await API.get(`/github/${username}/${repo}/contents`);
+export const repoGitHubApi = async (username: string, repo: string, uuid: string) => {
+  const response = await API.get(`/github/${username}/${repo}/contents/${uuid}`);
   return response.data;
-} 
-
+}
