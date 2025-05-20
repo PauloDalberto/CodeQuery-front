@@ -9,8 +9,11 @@ import { listMessages, uptadeConversation } from "@/services/ia/rooms";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactMarkdown from 'react-markdown';
+import { Loader2 } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
-interface Messages{
+interface Messages {
   role: string;
   content: string;
 }
@@ -18,41 +21,42 @@ interface Messages{
 export default function ChatAi() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const params = useParams();
   const { repo, username } = useRepoContext();
 
   useEffect(() => {
     const fetchMessages = async () => {
+      setLoading(true);
+
       const alreadyUpdated = localStorage.getItem(`updated-${params.conversation}`);
-      
       if (!alreadyUpdated) {
         await uptadeConversation(params.conversation as string, repo as string, username as string);
         localStorage.setItem(`updated-${params.conversation}`, "true");
       }
 
       const prevMessages = await listMessages(params.conversation as string);
-
       const formattedMessages = prevMessages.messages.map((msg: Messages) => ({
         role: msg.role,
         parts: msg.content,
       }));
 
       setMessages(formattedMessages);
+      setLoading(false);
     };
 
     fetchMessages();
   }, [params.conversation, repo, username]);
 
-
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const responseChat = await chatAiApi(params.conversation as string, input);
-
     const userMessage: Message = { role: "user", parts: input };
-
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+    setLoading(true);
+
+    const responseChat = await chatAiApi(params.conversation as string, input);
 
     const aiMessage: Message = {
       role: "model",
@@ -60,19 +64,26 @@ export default function ChatAi() {
     };
 
     setMessages((prev) => [...prev, aiMessage]);
+    setLoading(false);
   };
 
   return (
     <LayoutSidebar title="Chat com IA">
+      <Dialog open={loading}>
+        <DialogContent className="flex flex-col items-center justify-center gap-4 p-6">
+          <DialogTitle className="flex justify-start items-start w-full">Carregando</DialogTitle>
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <p className="text-sm text-muted-foreground">Carregando, por favor aguarde...</p>
+        </DialogContent>
+      </Dialog>
 
       <div className="p-6 flex flex-col h-[80vh]">
-        <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 ">
-
+        <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2">
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`flex ${ 
-                msg.role === "user" ? "justify-end" : "justify-start" 
+              className={`flex ${
+                msg.role === "user" ? "justify-end" : "justify-start"
               }`}
             >
               <div
@@ -82,9 +93,7 @@ export default function ChatAi() {
                     : "bg-muted text-foreground"
                 }`}
               >
-                <ReactMarkdown>
-                  {msg.parts as string}
-                </ReactMarkdown>
+                <ReactMarkdown>{msg.parts as string}</ReactMarkdown>
               </div>
             </div>
           ))}
@@ -98,7 +107,9 @@ export default function ChatAi() {
             placeholder="Digite sua mensagem..."
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
-          <Button onClick={handleSend} className="h-14">Enviar</Button>
+          <Button onClick={handleSend} className="h-14">
+            Enviar
+          </Button>
         </div>
       </div>
     </LayoutSidebar>
