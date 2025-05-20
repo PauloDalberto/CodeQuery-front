@@ -12,14 +12,12 @@ export default function RepoPage() {
   const { repo, username } = useRepoContext();
 
   const handleSelectChat =  async () => {
-    console.log(username as string, repo as string)
-    await repoGitHubApi(username as string, repo as string);
-    router.push(`/repo/room/${params.conversation}/chat`);      
+    await repoGitHubApi(username as string, repo as string, params.conversation as string);
+    router.push(`/repo/room/${params.conversation}/chat`);    
   }
 
   const handleSelectChallenge =  async () => {
-    console.log(username as string, repo as string)
-    await repoGitHubApi(username as string, repo as string);
+    await repoGitHubApi(username as string, repo as string, params.conversation as string);
     router.push(`/repo/room/${params.conversation}/challenge`);      
   }
 
