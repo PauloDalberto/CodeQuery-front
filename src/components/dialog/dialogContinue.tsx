@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { deleteConversation } from "@/services/ia/rooms"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 
 interface AlertDialogComponentProps {
   isOpen: boolean;
@@ -18,11 +18,12 @@ interface AlertDialogComponentProps {
 
 export function AlertDialogComponent({ isOpen, onClose }: AlertDialogComponentProps) {
   const params = useParams();
+  const routes = useRouter()
 
   const handleDelete = async () => {
     await deleteConversation(params.conversation as string);
     onClose();
-    location.reload()
+    routes.push('/')
   }
 
   return (
