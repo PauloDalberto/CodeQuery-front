@@ -1,4 +1,4 @@
-# 💬 Code Query
+# 💬 Code Query - Front End
 
 Um aplicativo web fullstack interativo que permite ao usuário conectar seu perfil, visualizar repositórios do GitHub e estudar código com ajuda de uma inteligência artificial. Possui sistema de autenticação, histórico de conversas, perguntas sobre código e modo de desafios/refatorações.
 
